@@ -68,9 +68,10 @@ namespace Paging //Zonica Lombard && Estian Yssel
                 }
                 count++;
                 textBox3.AppendText(textBox1.Text + " added to reference list. ");
+                textBox3.AppendText(Environment.NewLine);
             }
 
-            reference = label2.Text;
+            reference = label2.Text.Substring(14);
         }
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
@@ -85,7 +86,9 @@ namespace Paging //Zonica Lombard && Estian Yssel
             button3.Visible = false;
 
             textBox3.AppendText("Amount of slots available: " + textBox2.Text);
+            textBox3.AppendText(Environment.NewLine);
             textBox3.AppendText(" Paging started ...");
+            textBox3.AppendText(Environment.NewLine);
 
             positions = new string[count];
             positions = reference.Split(',');
@@ -239,7 +242,9 @@ namespace Paging //Zonica Lombard && Estian Yssel
                 if (counter > slots)
                 {
                     Console.WriteLine("Page fault occured. Remove slot " + positions[index] + " from memory");
+
                     textBox3.AppendText("Page fault occured. Remove slot " + positions[index] + " from memory. ");
+                    textBox3.AppendText(Environment.NewLine);
                 }
 
                 if (doubles == 0)
@@ -248,12 +253,14 @@ namespace Paging //Zonica Lombard && Estian Yssel
                     index++;
                     Console.Write(positions[i] + " add slot to memory");
                     textBox3.AppendText(positions[i] + " add slot to memory. ");
+                    textBox3.AppendText(Environment.NewLine);
                     counter++;
                 }
                 else
                 {
                     Console.Write(positions[i] + " slot already added to memory");
                     textBox3.AppendText(positions[i] + " slot already added to memory. ");
+                    textBox3.AppendText(Environment.NewLine);
                 }
 
                 doubles = 0;
@@ -262,6 +269,7 @@ namespace Paging //Zonica Lombard && Estian Yssel
             if (i == positions.Length)
             {
                 textBox3.AppendText("...Paging completed");
+                textBox3.AppendText(Environment.NewLine);
                 timer1.Stop();
             }
         }
