@@ -17,12 +17,12 @@ namespace Paging //Zonica Lombard && Estian Yssel
         private int slots;
         private int count;
         private string reference;
+        private string[] virtualPositions;
         private string[] positions;
         private int counter;
         private int index;
         private int doubles;
         private int i = 0;
-        //ESTIAN WAS HERE!
 
         public Form1()
         {
@@ -54,7 +54,7 @@ namespace Paging //Zonica Lombard && Estian Yssel
 
         private void button1_Click(object sender, EventArgs e)
         {
-            //ELiminate , infront of string (reference list)
+            //Eliminate , infront of string (reference list)
             if (textBox1.Text != String.Empty)
             {
                 if (firstclick == 0)
@@ -90,8 +90,12 @@ namespace Paging //Zonica Lombard && Estian Yssel
             textBox3.AppendText(" Paging started ...");
             textBox3.AppendText(Environment.NewLine);
 
-            positions = new string[count];
-            positions = reference.Split(',');
+            virtualPositions = new string[count];
+            virtualPositions = reference.Split(',');
+
+            positions = getPhysicalPages(virtualPositions);
+
+            
 
             counter = 1; // to see that if counter is equal to the amount of slots paging should start
             index = 1;   // btn shown
@@ -101,6 +105,60 @@ namespace Paging //Zonica Lombard && Estian Yssel
             //Start paging method
             runpaging();
         }
+
+        public string[] getPhysicalPages(string[] virtualPages)
+        {
+            int c = 0;
+            string[] physicalPages = new string[count];
+            foreach(string item in virtualPages)
+            {
+                string tempString = checkTLB(item);
+                if (tempString != null)
+                {
+                    physicalPages[c] = tempString; 
+                }
+                else
+                {
+                    tempString = checkPageTable(item);
+                }
+
+                physicalPages[c] = tempString;
+
+                c++;
+            }
+
+            return virtualPages;
+        }
+
+        public string checkTLB(string param)
+        {
+            foreach (var item in lbxTLB.Items)
+            {
+                
+                if(!item.ToString().Contains('P') && !item.ToString().Contains('='))
+                {
+                    string candidate = lbxTLB.Items[index].ToString();
+
+                    if (candidate.Remove(35).Contains(param))
+                    {
+                        return candidate.Remove(candidate.IndexOf(' '));
+                    }
+                }
+            
+            }
+            return null;
+
+        }
+
+        public string checkPageTable(string param)
+        {
+            
+            string physicalPage = lbxPageTable.Items[Convert.ToInt32(param)].ToString();
+
+            lbxTLB.Items.Add(param + "                                   " + physicalPage);
+            return physicalPage;
+        }
+
         public void addPage(int index, int slotpos) {
 
             switch (index) {
@@ -207,8 +265,6 @@ namespace Paging //Zonica Lombard && Estian Yssel
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            // for (int i = 0; i < count; i++)
-            //  {
             if (i < count)
             {
                 if (i >= slots)
@@ -280,6 +336,11 @@ namespace Paging //Zonica Lombard && Estian Yssel
         }
 
         private void textBox4_TextChanged_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lbxPageTable_SelectedIndexChanged(object sender, EventArgs e)
         {
 
         }

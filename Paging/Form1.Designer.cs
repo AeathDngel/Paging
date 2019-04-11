@@ -51,28 +51,28 @@
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
-            this.listBox1 = new System.Windows.Forms.ListBox();
-            this.listBox2 = new System.Windows.Forms.ListBox();
+            this.lbxTLB = new System.Windows.Forms.ListBox();
+            this.lbxPageTable = new System.Windows.Forms.ListBox();
             this.SuspendLayout();
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(197, 46);
+            this.textBox1.Location = new System.Drawing.Point(224, 46);
             this.textBox1.Margin = new System.Windows.Forms.Padding(2);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(127, 20);
+            this.textBox1.Size = new System.Drawing.Size(75, 20);
             this.textBox1.TabIndex = 0;
             this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(208, 21);
+            this.label1.Location = new System.Drawing.Point(209, 21);
             this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(107, 13);
+            this.label1.Size = new System.Drawing.Size(143, 13);
             this.label1.TabIndex = 1;
-            this.label1.Text = "Virtual Page Number:\r\n";
+            this.label1.Text = "Virtual Page Number (0 - 30):\r\n";
             // 
             // button1
             // 
@@ -102,9 +102,9 @@
             this.label3.Location = new System.Drawing.Point(7, 21);
             this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(161, 13);
+            this.label3.Size = new System.Drawing.Size(164, 13);
             this.label3.TabIndex = 7;
-            this.label3.Text = "Slots in memory available (1- 10):";
+            this.label3.Text = "Slots in memory available (1 - 10):";
             // 
             // textBox2
             // 
@@ -265,7 +265,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(881, 50);
+            this.label4.Location = new System.Drawing.Point(819, 53);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(174, 13);
             this.label4.TabIndex = 23;
@@ -274,41 +274,76 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(881, 195);
+            this.label5.Location = new System.Drawing.Point(819, 207);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(65, 13);
             this.label5.TabIndex = 25;
             this.label5.Text = "Page Table:";
             // 
-            // listBox1
+            // lbxTLB
             // 
-            this.listBox1.FormattingEnabled = true;
-            this.listBox1.Items.AddRange(new object[] {
-            "Virtual Page                Physical Page Address",
+            this.lbxTLB.FormattingEnabled = true;
+            this.lbxTLB.Items.AddRange(new object[] {
+            "Virtual Page                Physical Page",
             "=============================================="});
-            this.listBox1.Location = new System.Drawing.Point(884, 80);
-            this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(223, 95);
-            this.listBox1.TabIndex = 26;
+            this.lbxTLB.Location = new System.Drawing.Point(822, 80);
+            this.lbxTLB.Name = "lbxTLB";
+            this.lbxTLB.SelectionMode = System.Windows.Forms.SelectionMode.None;
+            this.lbxTLB.Size = new System.Drawing.Size(228, 108);
+            this.lbxTLB.TabIndex = 26;
             // 
-            // listBox2
+            // lbxPageTable
             // 
-            this.listBox2.FormattingEnabled = true;
-            this.listBox2.Items.AddRange(new object[] {
-            "Physical Page Address",
-            "====================================="});
-            this.listBox2.Location = new System.Drawing.Point(884, 228);
-            this.listBox2.Name = "listBox2";
-            this.listBox2.Size = new System.Drawing.Size(223, 251);
-            this.listBox2.TabIndex = 27;
+            this.lbxPageTable.FormattingEnabled = true;
+            this.lbxPageTable.Items.AddRange(new object[] {
+            "Physical Page in Main Memory",
+            "=====================================",
+            "42",
+            "23",
+            "11",
+            "5",
+            "2",
+            "6",
+            "1",
+            "15",
+            "16",
+            "17",
+            "24",
+            "3",
+            "4",
+            "5",
+            "12",
+            "7",
+            "9",
+            "8",
+            "13",
+            "21",
+            "31",
+            "22",
+            "32",
+            "14",
+            "10",
+            "52",
+            "62",
+            "72",
+            "82",
+            "92",
+            "3",
+            "79"});
+            this.lbxPageTable.Location = new System.Drawing.Point(822, 241);
+            this.lbxPageTable.Name = "lbxPageTable";
+            this.lbxPageTable.SelectionMode = System.Windows.Forms.SelectionMode.None;
+            this.lbxPageTable.Size = new System.Drawing.Size(228, 225);
+            this.lbxPageTable.TabIndex = 27;
+            this.lbxPageTable.SelectedIndexChanged += new System.EventHandler(this.lbxPageTable_SelectedIndexChanged);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1146, 491);
-            this.Controls.Add(this.listBox2);
-            this.Controls.Add(this.listBox1);
+            this.ClientSize = new System.Drawing.Size(1062, 491);
+            this.Controls.Add(this.lbxPageTable);
+            this.Controls.Add(this.lbxTLB);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.button3);
@@ -365,8 +400,8 @@
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.ListBox listBox1;
-        private System.Windows.Forms.ListBox listBox2;
+        private System.Windows.Forms.ListBox lbxTLB;
+        private System.Windows.Forms.ListBox lbxPageTable;
     }
 }
 
