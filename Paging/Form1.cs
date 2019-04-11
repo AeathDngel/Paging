@@ -273,6 +273,16 @@ namespace Paging //Zonica Lombard && Estian Yssel
                 timer1.Stop();
             }
         }
+
+        private void textBox4_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox4_TextChanged_1(object sender, EventArgs e)
+        {
+
+        }
     }
 }
 
