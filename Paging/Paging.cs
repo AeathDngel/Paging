@@ -11,7 +11,7 @@ using System.Windows.Forms;
 
 namespace Paging //Zonica Lombard && Estian Yssel
 {
-    public partial class Form1 : Form
+    public partial class Paging : Form
     {
         private int firstclick = 0;
         private int slots;
@@ -23,8 +23,10 @@ namespace Paging //Zonica Lombard && Estian Yssel
         private int index;
         private int doubles;
         private int i = 0;
+        private int tlbCount = 0;
+        private int tlbMax = 5;
 
-        public Form1()
+        public Paging()
         {
             InitializeComponent();
             Properties.Settings.Default.Start = "0";
@@ -71,7 +73,7 @@ namespace Paging //Zonica Lombard && Estian Yssel
                 textBox3.AppendText(Environment.NewLine);
             }
 
-            reference = label2.Text.Substring(14);
+            reference = label2.Text.Substring(15);
         }
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
@@ -87,26 +89,32 @@ namespace Paging //Zonica Lombard && Estian Yssel
 
             textBox3.AppendText("Amount of slots available: " + textBox2.Text);
             textBox3.AppendText(Environment.NewLine);
-            textBox3.AppendText(" Paging started ...");
+            textBox3.AppendText("Paging started ...");
             textBox3.AppendText(Environment.NewLine);
 
+
+            positions = new string[count];
+            positions = reference.Split(',');
+
             virtualPositions = new string[count];
+
+            /*virtualPositions = new string[count];
             virtualPositions = reference.Split(',');
 
-            positions = getPhysicalPages(virtualPositions);
+            positions = getPhysicalPages(virtualPositions);*/
 
-            
+
 
             counter = 1; // to see that if counter is equal to the amount of slots paging should start
             index = 1;   // btn shown
 
-           doubles = 0; //to check if slot already taken
+            doubles = 0; //to check if slot already taken
 
             //Start paging method
             runpaging();
         }
 
-        public string[] getPhysicalPages(string[] virtualPages)
+        /*public string[] getPhysicalPages(string[] virtualPages)
         {
             int c = 0;
             string[] physicalPages = new string[count];
@@ -128,23 +136,59 @@ namespace Paging //Zonica Lombard && Estian Yssel
             }
 
             return virtualPages;
+        }*/
+
+        public string getPhysicalPage(string virtualPage)
+        {
+            string tempString = checkTLB(virtualPage);
+            if (tempString == null)
+            {
+                tempString = checkPageTable(virtualPage);
+            }
+
+            return tempString;
         }
 
         public string checkTLB(string param)
         {
-            foreach (var item in lbxTLB.Items)
+            for(int itemIndex = 0; itemIndex < lbxTLB.Items.Count; itemIndex++)
             {
-                
-                if(!item.ToString().Contains('P') && !item.ToString().Contains('='))
+                try
                 {
-                    string candidate = lbxTLB.Items[index].ToString();
-
-                    if (candidate.Remove(35).Contains(param))
+                    if (!lbxTLB.Items[itemIndex].ToString().Contains("Page") || !lbxTLB.Items[itemIndex].ToString().Contains("="))
                     {
-                        return candidate.Remove(candidate.IndexOf(' '));
+                        string candidate = lbxTLB.Items[itemIndex].ToString();
+                        Console.WriteLine("Candidate = " +candidate);
+                        string candidatePageNum = candidate.Remove(candidate.IndexOf(' '));
+                        //MessageBox.Show(candidatePageNum);
+                        string candidateAddress = candidate.Substring(candidate.LastIndexOf(' '));
+                        //MessageBox.Show(candidateAddress);
+                        try
+                        {
+                            //MessageBox.Show(candidate);
+                            if (candidatePageNum == param)
+                            {
+                                textBox3.AppendText("Page " + param + " found in TLB");
+                                textBox3.AppendText(Environment.NewLine);
+                                return candidateAddress;
+                            }
+                        }
+                        catch (System.ArgumentOutOfRangeException e)
+                        {
+                            Console.WriteLine("Item is header");
+
+                        }
+
                     }
                 }
-            
+                catch (System.ArgumentOutOfRangeException e)
+                {
+                    Console.WriteLine("Item is header");
+
+                }
+                //MessageBox.Show(item.ToString());
+
+
             }
             return null;
 
@@ -153,43 +197,60 @@ namespace Paging //Zonica Lombard && Estian Yssel
         public string checkPageTable(string param)
         {
             
-            string physicalPage = lbxPageTable.Items[Convert.ToInt32(param)].ToString();
+            string physicalPage = lbxPageTable.Items[Convert.ToInt32(param) + 2].ToString();
 
-            lbxTLB.Items.Add(param + "                                   " + physicalPage);
-            return physicalPage;
+            if (tlbCount <= tlbMax)
+            {
+                textBox3.AppendText("Page " + param + " NOT found in TLB, adding to TLB");
+                textBox3.AppendText(Environment.NewLine);
+                lbxTLB.Items.Add(param + "                                   " + physicalPage);
+                tlbCount++;
+                return physicalPage;
+            }
+            else
+            {
+                textBox3.AppendText("TLB Full, using page table");
+                textBox3.AppendText(Environment.NewLine);
+                lbxTLB.Items.Add(param + "                                   " + physicalPage);
+                return physicalPage;
+            }
+            
+            
         }
 
-        public void addPage(int index, int slotpos) {
+        public void addPage(int index, int slotpos)
+        {
 
-            switch (index) {
-                case 1: btn1.Text = positions[slotpos];
+            switch (index)
+            {
+                case 1: btn1.Text = "Frame: " + positions[slotpos] + ", Page: " +virtualPositions[slotpos]; // positions[slotpos];
                     break;
                 case 2:
-                    btn2.Text = positions[slotpos];
+                    btn2.Text = "Frame: " + positions[slotpos] + ", Page: " + virtualPositions[slotpos]; // positions[slotpos];
                     break;
                 case 3:
-                    btn3.Text = positions[slotpos];
+                    btn3.Text = "Frame: " + positions[slotpos] + ", Page: " + virtualPositions[slotpos]; // positions[slotpos];
                     break;
                 case 4:
-                    btn4.Text = positions[slotpos];
+                    btn4.Text = "Frame: " + positions[slotpos] + ", Page: " + virtualPositions[slotpos]; // positions[slotpos];
                     break;
                 case 5:
-                    btn5.Text = positions[slotpos];
+                    btn5.Text = "Frame: " + positions[slotpos] + ", Page: " + virtualPositions[slotpos]; // positions[slotpos];
                     break;
                 case 6:
-                    btn6.Text = positions[slotpos];
+                    btn6.Text = "Frame: " + positions[slotpos] + ", Page: " + virtualPositions[slotpos]; // positions[slotpos];
                     break;
                 case 7:
-                    btn7.Text = positions[slotpos];
+                    btn7.Text = "Frame: " + positions[slotpos] + ", Page: " + virtualPositions[slotpos]; // positions[slotpos];
                     break;
                 case 8:
-                    btn8.Text = positions[slotpos];
+                    btn8.Text = "Frame: " + positions[slotpos] + ", Page: " + virtualPositions[slotpos]; // positions[slotpos];
                     break;
                 case 9:
-                    btn9.Text = positions[slotpos];
+                    btn9.Text = "Frame: " + positions[slotpos] + ", Page: " + virtualPositions[slotpos]; // positions[slotpos];
                     break;
                 case 10:
-                    btn10.Text = positions[slotpos];
+                    btn10.Text = "Frame: " + positions[slotpos] + ", Page: " + virtualPositions[slotpos]; // positions[slotpos];
                     break;
 
 
@@ -305,17 +366,20 @@ namespace Paging //Zonica Lombard && Estian Yssel
 
                 if (doubles == 0)
                 {
+                    virtualPositions[i] = getPhysicalPage(positions[i]);
                     addPage(index, i);
-                    index++;
-                    Console.Write(positions[i] + " add slot to memory");
-                    textBox3.AppendText(positions[i] + " add slot to memory. ");
+                    
+                    //Console.Write(virtualPositions[i] + " add slot to memory");
+                    textBox3.AppendText(virtualPositions[i] + " add slot to memory. ");
                     textBox3.AppendText(Environment.NewLine);
+                    index++;
                     counter++;
                 }
                 else
                 {
-                    Console.Write(positions[i] + " slot already added to memory");
-                    textBox3.AppendText(positions[i] + " slot already added to memory. ");
+                    virtualPositions[i] = getPhysicalPage(positions[i]);
+                    Console.Write(virtualPositions[i] + " slot already added to memory");
+                    textBox3.AppendText(virtualPositions[i] + " slot already added to memory. ");
                     textBox3.AppendText(Environment.NewLine);
                 }
 

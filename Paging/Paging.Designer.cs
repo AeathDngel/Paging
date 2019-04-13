@@ -1,6 +1,6 @@
 ﻿namespace Paging
 {
-    partial class Form1
+    partial class Paging
     {
         /// <summary>
         /// Required designer variable.
@@ -337,7 +337,7 @@
             this.lbxPageTable.TabIndex = 27;
             this.lbxPageTable.SelectedIndexChanged += new System.EventHandler(this.lbxPageTable_SelectedIndexChanged);
             // 
-            // Form1
+            // Paging
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -367,7 +367,7 @@
             this.Controls.Add(this.textBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Margin = new System.Windows.Forms.Padding(2);
-            this.Name = "Form1";
+            this.Name = "Paging";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Paging - FIFO Algorithm";
             this.Load += new System.EventHandler(this.Form1_Load);
