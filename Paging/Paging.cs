@@ -73,6 +73,7 @@ namespace Paging //Zonica Lombard && Estian Yssel
                 textBox3.AppendText(Environment.NewLine);
             }
 
+            //Gets string from label, after "Page Sequence: ".
             reference = label2.Text.Substring(15);
         }
 
@@ -92,10 +93,11 @@ namespace Paging //Zonica Lombard && Estian Yssel
             textBox3.AppendText("Paging started ...");
             textBox3.AppendText(Environment.NewLine);
 
-
+            //Get page sequence from reference string
             positions = new string[count];
             positions = reference.Split(',');
 
+            //Initialise virtual pages for later use
             virtualPositions = new string[count];
 
             /*virtualPositions = new string[count];
@@ -138,36 +140,46 @@ namespace Paging //Zonica Lombard && Estian Yssel
             return virtualPages;
         }*/
 
+        //Method which returns the physical page from the virtual page number given.
         public string getPhysicalPage(string virtualPage)
         {
+            //First checks if the page is loaded into the TLB
             string tempString = checkTLB(virtualPage);
-            if (tempString == null)
+            
+            if (tempString == null) //If the page is not loaded into TLB
             {
+                //Check page table for the physical page
                 tempString = checkPageTable(virtualPage);
             }
 
+            //Return the physical page
             return tempString;
         }
 
+        //Method searches TLB for page frame
         public string checkTLB(string param)
         {
+            //Loop through the items within the TLB list box
             for(int itemIndex = 0; itemIndex < lbxTLB.Items.Count; itemIndex++)
             {
                 try
                 {
+                    //Check if the item is not a header
                     if (!lbxTLB.Items[itemIndex].ToString().Contains("Page") || !lbxTLB.Items[itemIndex].ToString().Contains("="))
                     {
+                        //Store possible match in candidate
                         string candidate = lbxTLB.Items[itemIndex].ToString();
-                        Console.WriteLine("Candidate = " +candidate);
+                        //Get Page Number
                         string candidatePageNum = candidate.Remove(candidate.IndexOf(' '));
-                        //MessageBox.Show(candidatePageNum);
+                        //Get Page address
                         string candidateAddress = candidate.Substring(candidate.LastIndexOf(' '));
-                        //MessageBox.Show(candidateAddress);
+                        
                         try
                         {
-                            //MessageBox.Show(candidate);
+                            //If the page number is a match
                             if (candidatePageNum == param)
                             {
+                                //Page loaded from TLB
                                 textBox3.AppendText("Page " + param + " found in TLB");
                                 textBox3.AppendText(Environment.NewLine);
                                 return candidateAddress;
@@ -175,7 +187,7 @@ namespace Paging //Zonica Lombard && Estian Yssel
                         }
                         catch (System.ArgumentOutOfRangeException e)
                         {
-                            Console.WriteLine("Item is header");
+                            Console.WriteLine("Item is header...");
 
                         }
 
@@ -183,7 +195,7 @@ namespace Paging //Zonica Lombard && Estian Yssel
                 }
                 catch (System.ArgumentOutOfRangeException e)
                 {
-                    Console.WriteLine("Item is header");
+                    Console.WriteLine("Item is header...");
 
                 }
                 //MessageBox.Show(item.ToString());
@@ -199,7 +211,7 @@ namespace Paging //Zonica Lombard && Estian Yssel
             
             string physicalPage = lbxPageTable.Items[Convert.ToInt32(param) + 2].ToString();
 
-            if (tlbCount <= tlbMax)
+            if (lbxTLB.Items.Count <= 5)
             {
                 textBox3.AppendText("Page " + param + " NOT found in TLB, adding to TLB");
                 textBox3.AppendText(Environment.NewLine);
@@ -211,7 +223,7 @@ namespace Paging //Zonica Lombard && Estian Yssel
             {
                 textBox3.AppendText("TLB Full, using page table");
                 textBox3.AppendText(Environment.NewLine);
-                lbxTLB.Items.Add(param + "                                   " + physicalPage);
+                //lbxTLB.Items.Add(param + "                                   " + physicalPage);
                 return physicalPage;
             }
             
