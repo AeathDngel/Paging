@@ -75,6 +75,8 @@ namespace Paging //Zonica Lombard && Estian Yssel
 
             //Gets string from label, after "Page Sequence: ".
             reference = label2.Text.Substring(15);
+            textBox1.Clear();
+            textBox1.Focus();
         }
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
@@ -100,12 +102,6 @@ namespace Paging //Zonica Lombard && Estian Yssel
             //Initialise virtual pages for later use
             virtualPositions = new string[count];
 
-            /*virtualPositions = new string[count];
-            virtualPositions = reference.Split(',');
-
-            positions = getPhysicalPages(virtualPositions);*/
-
-
 
             counter = 1; // to see that if counter is equal to the amount of slots paging should start
             index = 1;   // btn shown
@@ -115,30 +111,6 @@ namespace Paging //Zonica Lombard && Estian Yssel
             //Start paging method
             runpaging();
         }
-
-        /*public string[] getPhysicalPages(string[] virtualPages)
-        {
-            int c = 0;
-            string[] physicalPages = new string[count];
-            foreach(string item in virtualPages)
-            {
-                string tempString = checkTLB(item);
-                if (tempString != null)
-                {
-                    physicalPages[c] = tempString; 
-                }
-                else
-                {
-                    tempString = checkPageTable(item);
-                }
-
-                physicalPages[c] = tempString;
-
-                c++;
-            }
-
-            return virtualPages;
-        }*/
 
         //Method which returns the physical page from the virtual page number given.
         public string getPhysicalPage(string virtualPage)
@@ -187,6 +159,7 @@ namespace Paging //Zonica Lombard && Estian Yssel
                         }
                         catch (System.ArgumentOutOfRangeException e)
                         {
+                            //If item is header
                             Console.WriteLine("Item is header...");
 
                         }
@@ -195,87 +168,93 @@ namespace Paging //Zonica Lombard && Estian Yssel
                 }
                 catch (System.ArgumentOutOfRangeException e)
                 {
+                    //If item is header
                     Console.WriteLine("Item is header...");
 
                 }
-                //MessageBox.Show(item.ToString());
+                
 
 
             }
+            //Not in TLB return null
             return null;
 
         }
 
+        //Method which returns the value of within the page table at the specified page frame
         public string checkPageTable(string param)
         {
-            
+            //Gets the physical page from the page table. +2 is to skip headers.
             string physicalPage = lbxPageTable.Items[Convert.ToInt32(param) + 2].ToString();
 
-            if (lbxTLB.Items.Count <= 5)
+            //Check if the TLB is full or not
+            if (lbxTLB.Items.Count <= tlbMax + 2)
             {
+                //Adds page to TLB.
                 textBox3.AppendText("Page " + param + " NOT found in TLB, adding to TLB");
                 textBox3.AppendText(Environment.NewLine);
                 lbxTLB.Items.Add(param + "                                   " + physicalPage);
                 tlbCount++;
+                //Return the physical page
                 return physicalPage;
             }
             else
             {
+                //TLB is full. Program uses page table instead.
                 textBox3.AppendText("TLB Full, using page table");
                 textBox3.AppendText(Environment.NewLine);
-                //lbxTLB.Items.Add(param + "                                   " + physicalPage);
                 return physicalPage;
             }
             
             
         }
 
+        //Method to add the page to the GUI
         public void addPage(int index, int slotpos)
         {
-
+            //Switch between buttons on display
             switch (index)
             {
-                case 1: btn1.Text = "Frame: " + positions[slotpos] + ", Page: " +virtualPositions[slotpos]; // positions[slotpos];
+                case 1: btn1.Text = "Frame: " + positions[slotpos] + ", Page: " +virtualPositions[slotpos];
                     break;
                 case 2:
-                    btn2.Text = "Frame: " + positions[slotpos] + ", Page: " + virtualPositions[slotpos]; // positions[slotpos];
+                    btn2.Text = "Frame: " + positions[slotpos] + ", Page: " + virtualPositions[slotpos];
                     break;
                 case 3:
-                    btn3.Text = "Frame: " + positions[slotpos] + ", Page: " + virtualPositions[slotpos]; // positions[slotpos];
+                    btn3.Text = "Frame: " + positions[slotpos] + ", Page: " + virtualPositions[slotpos];
                     break;
                 case 4:
-                    btn4.Text = "Frame: " + positions[slotpos] + ", Page: " + virtualPositions[slotpos]; // positions[slotpos];
+                    btn4.Text = "Frame: " + positions[slotpos] + ", Page: " + virtualPositions[slotpos];
                     break;
                 case 5:
-                    btn5.Text = "Frame: " + positions[slotpos] + ", Page: " + virtualPositions[slotpos]; // positions[slotpos];
+                    btn5.Text = "Frame: " + positions[slotpos] + ", Page: " + virtualPositions[slotpos];
                     break;
                 case 6:
-                    btn6.Text = "Frame: " + positions[slotpos] + ", Page: " + virtualPositions[slotpos]; // positions[slotpos];
+                    btn6.Text = "Frame: " + positions[slotpos] + ", Page: " + virtualPositions[slotpos];
                     break;
                 case 7:
-                    btn7.Text = "Frame: " + positions[slotpos] + ", Page: " + virtualPositions[slotpos]; // positions[slotpos];
+                    btn7.Text = "Frame: " + positions[slotpos] + ", Page: " + virtualPositions[slotpos];
                     break;
                 case 8:
-                    btn8.Text = "Frame: " + positions[slotpos] + ", Page: " + virtualPositions[slotpos]; // positions[slotpos];
+                    btn8.Text = "Frame: " + positions[slotpos] + ", Page: " + virtualPositions[slotpos];
                     break;
                 case 9:
-                    btn9.Text = "Frame: " + positions[slotpos] + ", Page: " + virtualPositions[slotpos]; // positions[slotpos];
+                    btn9.Text = "Frame: " + positions[slotpos] + ", Page: " + virtualPositions[slotpos];
                     break;
                 case 10:
-                    btn10.Text = "Frame: " + positions[slotpos] + ", Page: " + virtualPositions[slotpos]; // positions[slotpos];
+                    btn10.Text = "Frame: " + positions[slotpos] + ", Page: " + virtualPositions[slotpos];
                     break;
 
 
             }
         }
         
-        public void runpaging() {
-
-
+        //Starts the paging process.
+        public void runpaging()
+        {
+            //Starts the timer which handles the step-by-step process
             timer1.Start();
-            
-
-           }
+        }
         
         private void button6_Click(object sender, EventArgs e)
         {
@@ -292,11 +271,13 @@ namespace Paging //Zonica Lombard && Estian Yssel
 
         }
 
+        //Button click event handler which shows the buttons
         private void button3_Click(object sender, EventArgs e)
         {
+            //Get amount of slots from text box
             slots = Int32.Parse(textBox2.Text);
 
-
+            
             for (int i = 1; i <= slots; i++)
             {
                 switch (i) {
@@ -336,6 +317,7 @@ namespace Paging //Zonica Lombard && Estian Yssel
             }
         }
 
+        //Timer event handler for every tick.
         private void timer1_Tick(object sender, EventArgs e)
         {
             if (i < count)
@@ -422,6 +404,3 @@ namespace Paging //Zonica Lombard && Estian Yssel
         }
     }
 }
-
-
-//ESTIAN TLB en PAGE FRAMES
